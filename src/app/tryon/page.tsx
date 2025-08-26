@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback, Suspense } from "react"
 import { useSearchParams } from "next/navigation"
 import { Navigation } from "@/components/navigation"
 import { Button } from "@/components/ui/button"
@@ -25,7 +25,7 @@ import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
 import { formatPrice } from "@/lib/utils"
 
-export default function TryOnPage() {
+function TryOnContent() {
     const searchParams = useSearchParams()
     const productId = searchParams.get('product')
 
@@ -39,13 +39,10 @@ export default function TryOnPage() {
     const {
         videoRef,
         canvasRef,
-        isInitialized,
         isStreaming,
-        permissions,
         error,
         faceDetection,
         gestureDetection,
-        requestPermissions,
         stopStream,
         captureScreenshot,
         startARSession
@@ -79,7 +76,7 @@ export default function TryOnPage() {
         setSelectedProducts(selectedProducts.filter(p => p.id !== productId))
     }
 
-    const handleNextProduct = () => {
+    const handleNextProduct = useCallback(() => {
         if (recommendations.length > 0) {
             const currentIndex = recommendations.findIndex(p => selectedProducts.some(sp => sp.id === p.id))
             const nextIndex = (currentIndex + 1) % recommendations.length
@@ -91,9 +88,9 @@ export default function TryOnPage() {
                 setSelectedProducts([...selectedProducts, nextProduct])
             }
         }
-    }
+    }, [recommendations, selectedProducts])
 
-    const handlePreviousProduct = () => {
+    const handlePreviousProduct = useCallback(() => {
         if (recommendations.length > 0) {
             const currentIndex = recommendations.findIndex(p => selectedProducts.some(sp => sp.id === p.id))
             const prevIndex = currentIndex === 0 ? recommendations.length - 1 : currentIndex - 1
@@ -105,7 +102,7 @@ export default function TryOnPage() {
                 setSelectedProducts([...selectedProducts, prevProduct])
             }
         }
-    }
+    }, [recommendations, selectedProducts])
 
     // Handle gesture commands
     useEffect(() => {
@@ -126,7 +123,7 @@ export default function TryOnPage() {
                     break
             }
         }
-    }, [gestureDetection, recommendations, selectedProducts])
+    }, [gestureDetection, handleNextProduct, handlePreviousProduct])
 
     const handleStartAR = async () => {
         if (!isStreaming) {
@@ -412,7 +409,7 @@ export default function TryOnPage() {
                                         <p>• Wave: Activate controls</p>
                                         <p>• Swipe left/right: Change items</p>
                                         <p>• Pinch: Adjust fit</p>
-                                        <p>• Voice: "next item", "capture"</p>
+                                        <p>• Voice: &quot;next item&quot;, &quot;capture&quot;</p>
                                     </div>
                                 </CardContent>
                             </Card>
@@ -453,5 +450,13 @@ export default function TryOnPage() {
                 </div>
             </div>
         </div>
+    )
+}
+
+export default function TryOnPage() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <TryOnContent />
+        </Suspense>
     )
 }

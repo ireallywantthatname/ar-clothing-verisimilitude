@@ -24,7 +24,7 @@ export default function DiscoverPage() {
         const loadProducts = async () => {
             setLoading(true)
             try {
-                const filters: any = {}
+                const filters: Record<string, string | [number, number]> = {}
 
                 if (selectedCategory !== "all") {
                     filters.category = selectedCategory

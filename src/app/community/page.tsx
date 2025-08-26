@@ -193,7 +193,7 @@ export default function CommunityPage() {
                             ].map((tab) => (
                                 <button
                                     key={tab.id}
-                                    onClick={() => setActiveTab(tab.id as any)}
+                                    onClick={() => setActiveTab(tab.id as "trending" | "following" | "recent")}
                                     className={`flex items-center gap-2 px-4 py-2 rounded-md transition-colors ${activeTab === tab.id
                                         ? "bg-purple-100 text-purple-700"
                                         : "hover:bg-gray-100"

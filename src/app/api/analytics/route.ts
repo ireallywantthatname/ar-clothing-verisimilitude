@@ -3,19 +3,21 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { sessionId, imageData, products, biometricData, deviceInfo } = body;
+    const { sessionId, products, biometricData, deviceInfo } = body;
 
     // Mock analytics tracking
     const analyticsEvent = {
       type: "try_on_session",
       sessionId,
       timestamp: new Date().toISOString(),
-      products: products?.map((p: any) => ({
-        id: p.id,
-        name: p.name,
-        category: p.category,
-        price: p.price,
-      })),
+      products: products?.map(
+        (p: { id: string; name: string; category: string; price: number }) => ({
+          id: p.id,
+          name: p.name,
+          category: p.category,
+          price: p.price,
+        })
+      ),
       biometricData: {
         faceShape: biometricData?.faceShape,
         skinTone: biometricData?.skinTone,

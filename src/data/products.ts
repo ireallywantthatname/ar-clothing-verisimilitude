@@ -442,10 +442,7 @@ export const getProductById = async (id: string): Promise<Product | null> => {
   return mockProducts.find((product) => product.id === id) || null;
 };
 
-export const getRecommendations = async (
-  userId?: string,
-  context?: any
-): Promise<Product[]> => {
+export const getRecommendations = async (): Promise<Product[]> => {
   await new Promise((resolve) => setTimeout(resolve, 400));
 
   // Mock recommendation logic - return random products

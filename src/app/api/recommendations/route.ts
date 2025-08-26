@@ -3,10 +3,10 @@ import { getRecommendations } from "@/data/products";
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { userId, context } = body;
+    // body contains userId and context for future enhancement
+    await request.json();
 
-    const recommendations = await getRecommendations(userId, context);
+    const recommendations = await getRecommendations();
 
     return NextResponse.json({
       success: true,
@@ -26,9 +26,10 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const userId = searchParams.get("userId");
+    // userId is available for future enhancement
+    searchParams.get("userId");
 
-    const recommendations = await getRecommendations(userId || undefined);
+    const recommendations = await getRecommendations();
 
     return NextResponse.json({
       success: true,

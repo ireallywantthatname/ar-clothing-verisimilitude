@@ -5,7 +5,10 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
 
-    const filters: any = {};
+    const filters: Record<
+      string,
+      string | number | string[] | [number, number]
+    > = {};
 
     // Parse query parameters
     const category = searchParams.get("category");

@@ -10,7 +10,7 @@ const quicksand = Quicksand({
 });
 
 export const metadata: Metadata = {
-  title: "StyleTry - AR Virtual Try-On Platform",
+  title: "verisimilitude - AR Virtual Try-On Platform",
   description: "Experience the future of online shopping with AI-powered virtual try-on technology",
 };
 
